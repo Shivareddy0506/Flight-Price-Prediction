@@ -40,7 +40,7 @@ st.write("""Air travel pricing is dynamic and influenced by multiple factors suc
 
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    st.image("https://www.istockphoto.com/photo/airplane-flying-over-tropical-sea-at-sunset-gm1526986072-524905290", width=400)
+    st.image("https://akm-img-a-in.tosshub.com/indiatoday/images/story/201610/story-647_102816033302.jpg?VersionId=9e6ouZp78m0_UBOsxoP1FDivMdKklS2e", width=400)
 
 st.markdown("Model trained on below input data to perform  predictions.")
 
@@ -144,4 +144,5 @@ if st.button("Predict"):
     out = model.predict(user_data)[0]
 
     st.subheader(f":orange[Predicted flight price: :blue[{out}]]")
+
     st.balloons()
