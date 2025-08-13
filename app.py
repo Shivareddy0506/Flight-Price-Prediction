@@ -103,12 +103,10 @@ if st.button("Predict"):
     (Data["Source"] == Source ) & 
     (Data["Destination"] == Destination) 
     ]
-
-
-    if user_data.empty:
-        return ("No matching flights found.")
-    
     r = user_data.copy()
+    if r.empty:
+        print("No matching flights found.")
+    
     r.drop("Route", axis=1, inplace=True)
     r.replace({
             'Trujet': 1, 'SpiceJet': 2, 'Air Asia': 3, 'IndiGo': 4, 'GoAir': 5, 
@@ -129,4 +127,5 @@ if st.button("Predict"):
 
     st.balloons()
     
+
 
