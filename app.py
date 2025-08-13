@@ -103,10 +103,14 @@ if st.button("Predict"):
     (Data["Source"] == Source ) & 
     (Data["Destination"] == Destination) 
     ]
-    r = user_data.copy()
-    
-    r.drop("Route", axis=1, inplace=True)
-    r.replace({
+
+
+    if user_data.empty:
+        print("No matching flights found.")
+    else:
+        r = user_data.copy()
+        r.drop("Route", axis=1, inplace=True)
+        r.replace({
             'Trujet': 1, 'SpiceJet': 2, 'Air Asia': 3, 'IndiGo': 4, 'GoAir': 5, 
             'Vistara': 6, 'Vistara Premium economy': 7, 'Air India': 8, 
             'Multiple carriers': 9, 'Multiple carriers Premium economy': 10, 
@@ -114,18 +118,14 @@ if st.button("Predict"):
             'Chennai': 1, 'Mumbai': 2, 'Banglore': 3, 'Kolkata': 4, 'Delhi': 5,
             'Kolkata': 1, 'Hyderabad': 2, 'Delhi': 3, 'Banglore': 4, 
             'Cochin': 5, 'New Delhi': 6}, inplace=True)
-
-
-    predicted_prices = model.predict(r)
-    user_data["Predicted Price"] = predicted_prices 
-    
-    top5 = user_data.sort_values(by="Predicted Price", ascending=True).head(5)
-    if top5.empty:
-        print("No matching flights found.")
-    else:
+        predicted_prices = model.predict(r)
+        user_data["Predicted Price"] = predicted_prices 
+        top5 = user_data.sort_values(by="Predicted Price", ascending=True).head(5)
         st.dataframe(top5[["Airline","Route","day in a month","Predicted Price"]])
         st.balloons()
     
+    
+
 
 
 
