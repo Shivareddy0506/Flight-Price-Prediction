@@ -106,7 +106,7 @@ if st.button("Predict"):
 
 
     if user_data.empty:
-        print("No matching flights found.")
+        st.write("""No matching flights found.""")
     else:
         r = user_data.copy()
         r.drop("Route", axis=1, inplace=True)
@@ -125,6 +125,7 @@ if st.button("Predict"):
         st.balloons()
     
     
+
 
 
 
