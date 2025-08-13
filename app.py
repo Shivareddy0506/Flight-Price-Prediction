@@ -92,46 +92,25 @@ st.subheader(":blue[ Provide details to Discover Flight prices:]")
 
 
 
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2 = st.columns([1, 1])
 with col1:
-    airlines = st.selectbox("Select airlines:", Data.Airline.unique()[:5])
-with col2:
     Source = st.selectbox("Select source:", Data.Source.unique())
-with col3:
+with col2:
     Destination = st.selectbox("Select destination:", Data.Destination.unique())
 
-col4, col5, col6 = st.columns([1, 1, 1])
-with col4:
-    flight_duration = st.number_input("Enter flight duration in minutes:")
-with col5:
-    stops = st.number_input("Enter number of stops:")
-with col6:
-    month_number = st.number_input("Enter month:")
-
-
-col7, col8, col9 = st.columns([1, 1, 1])
-with col7:
-    day = st.number_input("Select date:")
-with col8:
-    deperture_hour = st.number_input("Select departure hour:")
-with col9:
-    deperture_minute = st.number_input("Select deperture minute:")
-
-col10, col11 = st.columns([1, 1])
-with col10:
-    Arrival_hour = st.number_input("enter arrival hour :")
-with col11:
-    Arrival_minute = st.number_input("enter arrival minute:")
-
 if st.button("Predict"):
-    user_data = pd.DataFrame([[airlines,Source,Destination,flight_duration,stops,month_number,
-                               day,deperture_hour,deperture_minute,Arrival_hour,Arrival_minute]],
-                             columns=Data.columns)
+    user_data = Data[
+    (Data["Source"] == Source ) & 
+    (Data["Destination"] == Destination) 
+    ]
 
-    st.write("Given Data:")
-    st.dataframe(user_data)
 
-    user_data.replace({
+    if user_data.empty:
+        print("No matching flights found.")
+    
+    r = user_data.copy()
+    r.drop("Route", axis=1, inplace=True)
+    r.replace({
             'Trujet': 1, 'SpiceJet': 2, 'Air Asia': 3, 'IndiGo': 4, 'GoAir': 5, 
             'Vistara': 6, 'Vistara Premium economy': 7, 'Air India': 8, 
             'Multiple carriers': 9, 'Multiple carriers Premium economy': 10, 
@@ -141,8 +120,12 @@ if st.button("Predict"):
             'Cochin': 5, 'New Delhi': 6}, inplace=True)
 
 
-    out = model.predict(user_data)[0]
+    predicted_prices = model.predict(r)
+    user_data["Predicted Price"] = predicted_prices 
 
-    st.subheader(f":orange[Predicted flight price: :blue[{out}]]")
+    top5 = user_data.sort_values(by="Predicted Price", ascending=True).head(5)
+
+    st.dataframe(top5[["Airline","Route","day in a month","Predicted Price"]])
 
     st.balloons()
+    
