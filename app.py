@@ -104,8 +104,6 @@ if st.button("Predict"):
     (Data["Destination"] == Destination) 
     ]
     r = user_data.copy()
-    if r.empty:
-        print("No matching flights found.")
     
     r.drop("Route", axis=1, inplace=True)
     r.replace({
@@ -120,12 +118,14 @@ if st.button("Predict"):
 
     predicted_prices = model.predict(r)
     user_data["Predicted Price"] = predicted_prices 
-
-    top5 = user_data.sort_values(by="Predicted Price", ascending=True).head(5)
-
-    st.dataframe(top5[["Airline","Route","day in a month","Predicted Price"]])
-
-    st.balloons()
     
+    top5 = user_data.sort_values(by="Predicted Price", ascending=True).head(5)
+    if top5.empty:
+        print("No matching flights found.")
+    else:
+        st.dataframe(top5[["Airline","Route","day in a month","Predicted Price"]])
+        st.balloons()
+    
+
 
 
