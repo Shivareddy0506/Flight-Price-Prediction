@@ -84,7 +84,7 @@ Data = pd.read_csv(csv_path)
 model = joblib.load(model_path)
 
 
-st.write("Ridge algorithm applied to the below Dataset:")
+st.write("Xgboost regressor applied to the below Dataset:")
 st.dataframe(Data.head())
 #st.write("---")
 
@@ -125,6 +125,7 @@ if st.button("Predict"):
         st.balloons()
     
     
+
 
 
 
